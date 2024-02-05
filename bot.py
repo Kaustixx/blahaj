@@ -31,11 +31,19 @@ async def on_ready():
 async def on_message(message):
     if client.user.mentioned_in(message) and message.reference is None:
         await message.reply("🎆 The Haj is here! 🦈")
-    elif message.reference is not None and "shark" in message.content.lower() and client.user.mentioned_in(message):
+    elif "shark" in message.content.lower() and message.author.id != client.user.id:
         await message.reply("shark")
-    elif message.reference is not None and "yokoso" in message.content.lower() and client.user.mentioned_in(message):
+    elif "yokoso" in message.content.lower() and message.author.id != client.user.id:
         await message.reply("<:YOKOSO:1167289778190946334>")
     await client.process_commands(message)
+
+@client.command(name='help')
+async def help(ctx):
+    embed = discord.Embed(description="Blahaj commands", color=discord.Color.from_rgb(178, 208, 250))
+    embed.add_field(name="Fun commands", value="`-blahaj` >Show a random blahaj \n `-shark` >Show a random blahaj")
+    embed.add_field(name = chr(173), value = chr(173))
+    embed.add_field(name="Moderation commands", value="`-domain_expansion` >Send someone to a domain. Put a number after the command(no space) to specify the number of domain. \n `-release` >Release someone from domains.")
+    await ctx.reply(embed=embed)
 
 @client.command(name='blahaj')
 async def blahaj(ctx):
@@ -74,11 +82,27 @@ async def domain_expansion(ctx, member: discord.Member):
     await ctx.send(file=File("Domain Expansion.mp4"))
     await member.add_roles(role)
 
+@client.command(name= "domain_expansion2")
+@commands.has_permissions(manage_roles=True)
+async def domain_expansion2(ctx, member: discord.Member):
+    role = discord.utils.get(member.guild.roles, id=(1201105937876914309))
+    await ctx.send(file=File("Domain Expansion.mp4"))
+    await member.add_roles(role)
+
+@client.command(name= "domain_expansion3")
+@commands.has_permissions(manage_roles=True)
+async def domain_expansion3(ctx, member: discord.Member):
+    role = discord.utils.get(member.guild.roles, id=(1201106063487926322))
+    await ctx.send(file=File("Domain Expansion.mp4"))
+    await member.add_roles(role)
+
 @client.command(name= "release")
 @commands.has_permissions(manage_roles=True)
 async def release(ctx, member: discord.Member):
     role = discord.utils.get(member.guild.roles, id=(1187353451735289897))
+    role2 = discord.utils.get(member.guild.roles, id=(1201105937876914309))
+    role3 = discord.utils.get(member.guild.roles, id=(1201106063487926322))
     await ctx.send(file=File("Domain Reversal.mp4"))
-    await member.remove_roles(role)
+    await member.remove_roles(role, role2, role3)
 
 client.run(TOKEN)
