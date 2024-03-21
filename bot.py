@@ -1,11 +1,10 @@
 import discord
 from discord import player
 from discord import colour
-from discord.ext import commands
-from discord.ext.commands.errors import BadArgument, CommandNotFound, MissingRequiredArgument
-from discord import app_commands
+from discord import SlashCommandGroup
 from discord import File
-from discord.utils import get
+from discord import default_permissions
+from discord import commands
 import random
 import json
 import typing
@@ -19,33 +18,37 @@ intents.message_content = True
 intents.members = True
 intents.moderation = True
 
-client = commands.Bot(command_prefix="-", help_command=None, intents=intents)
+bot = discord.Bot(command_prefix='-', intents = intents)
 
-
-@client.event
+@bot.event
 async def on_ready():
-    await client.change_presence(activity=discord.Activity(type=discord.ActivityType.playing, name="Blahaj World"))
+    await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.playing, name="Blahaj World"))
     print("We Are Ready Now")
 
-@client.event
+@bot.event
 async def on_message(message):
-    if client.user.mentioned_in(message) and message.reference is None:
+    if bot.user.mentioned_in(message) and message.reference is None:
         await message.reply("🎆 The Haj is here! 🦈")
     elif "shark" in message.content.lower() and message.author.id != client.user.id:
         await message.reply("shark")
     elif "yokoso" in message.content.lower() and message.author.id != client.user.id:
         await message.reply("<:YOKOSO:1167289778190946334>")
-    await client.process_commands(message)
+    await bot.process_application_commands(message)
 
-@client.command(name='help')
+@bot.message_command(name='Blåhaj says')
+async def blahaj_says(ctx, message: discord.Message):
+    await ctx.respond("Initializing speech bubble", ephemeral=True)
+    await message.reply(file=File("blahaj_says.png"))
+
+@bot.slash_command(name='help', description='list of commands')
 async def help(ctx):
     embed = discord.Embed(description="Blahaj commands", color=discord.Color.from_rgb(178, 208, 250))
     embed.add_field(name="Fun commands", value="`-blahaj` >Show a random blahaj \n `-shark` >Show a random blahaj")
     embed.add_field(name = chr(173), value = chr(173))
-    embed.add_field(name="Moderation commands", value="`-domain_expansion` >Send someone to a domain. Put a number after the command(no space) to specify the number of domain. \n `-release` >Release someone from domains.")
-    await ctx.reply(embed=embed)
+    embed.add_field(name="Moderation commands", value="`-domain_expansion` >Send someone to a domain. Specify a number to to specify the number of domain. \n `-release` >Release someone from domains.")
+    await ctx.respond(embed=embed)
 
-@client.command(name='blahaj')
+@bot.slash_command(name='blahaj', description='show a random blahaj')
 async def blahaj(ctx):
     def random_blahaj():
         with open('blahaj.json') as dt:
@@ -57,9 +60,9 @@ async def blahaj(ctx):
     embed = discord.Embed(
         description=f"Here is a **{blahajImageName}** 🦈", color=discord.Color.from_rgb(178, 208, 250))
     embed.set_image(url=blahajImageLink)
-    await ctx.reply(embed=embed)
+    await ctx.respond(embed=embed)
 
-@client.command(name='shark')
+@bot.slash_command(name='shark', description='show a random blahaj')
 async def blahaj(ctx):
     def random_blahaj():
         with open('blahaj.json') as dt:
@@ -71,38 +74,27 @@ async def blahaj(ctx):
     embed = discord.Embed(
         description=f"Here is a **{blahajImageName}** 🦈", color=discord.Color.from_rgb(178, 208, 250))
     embed.set_image(url=blahajImageLink)
-    await ctx.reply(embed=embed)
+    await ctx.respond(embed=embed)
 
-testServerId = 713322963193167913
-
-@client.command(name= "domain_expansion")
-@commands.has_permissions(manage_roles=True)
-async def domain_expansion(ctx, member: discord.Member):
-    role = discord.utils.get(member.guild.roles, id=(1187353451735289897))
-    await ctx.send(file=File("Domain Expansion.mp4"))
+@bot.slash_command(name='domain_expansion', description ='send a user to a domain')
+@default_permissions(manage_roles=True)
+async def domain_expansion(ctx, domain_number: discord.Option(int, choices=[1, 2, 3]), member: discord.Member):
+    if domain_number == 1:
+        role = discord.utils.get(member.guild.roles, id=(1187353451735289897))
+    elif domain_number == 2:
+        role = discord.utils.get(member.guild.roles, id=(1201105937876914309))
+    elif domain_number == 3:
+        role = discord.utils.get(member.guild.roles, id=(1201106063487926322))
+    await ctx.respond(file=File("Domain Expansion.mp4"))
     await member.add_roles(role)
 
-@client.command(name= "domain_expansion2")
-@commands.has_permissions(manage_roles=True)
-async def domain_expansion2(ctx, member: discord.Member):
-    role = discord.utils.get(member.guild.roles, id=(1201105937876914309))
-    await ctx.send(file=File("Domain Expansion.mp4"))
-    await member.add_roles(role)
-
-@client.command(name= "domain_expansion3")
-@commands.has_permissions(manage_roles=True)
-async def domain_expansion3(ctx, member: discord.Member):
-    role = discord.utils.get(member.guild.roles, id=(1201106063487926322))
-    await ctx.send(file=File("Domain Expansion.mp4"))
-    await member.add_roles(role)
-
-@client.command(name= "release")
-@commands.has_permissions(manage_roles=True)
+@bot.slash_command(name="release", description='release a user from a domain')
+@default_permissions(manage_roles=True)
 async def release(ctx, member: discord.Member):
     role = discord.utils.get(member.guild.roles, id=(1187353451735289897))
     role2 = discord.utils.get(member.guild.roles, id=(1201105937876914309))
     role3 = discord.utils.get(member.guild.roles, id=(1201106063487926322))
-    await ctx.send(file=File("Domain Reversal.mp4"))
+    await ctx.respond(file=File("Domain Reversal.mp4"))
     await member.remove_roles(role, role2, role3)
 
-client.run(TOKEN)
+bot.run(TOKEN)
