@@ -19,7 +19,7 @@ intents.members = True
 intents.moderation = True
 
 bot = discord.Bot(command_prefix='-', intents = intents)
-testingservers = [713322963193167913]
+testingservers = [1281122097778921515, 713322963193167913]
 
 @bot.event
 async def on_ready():
