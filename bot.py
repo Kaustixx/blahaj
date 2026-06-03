@@ -4,7 +4,6 @@ from discord import default_permissions
 import random
 import json
 import datetime
-from time import sleep
 
 with open("config.json", "r") as f:
     config = json.load(f)
