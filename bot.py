@@ -4,6 +4,7 @@ from discord import default_permissions
 import random
 import json
 import datetime
+impoet asyncio
 
 with open("config.json", "r") as f:
     config = json.load(f)
@@ -60,21 +61,27 @@ async def on_ready():
     )
     print("We Are Ready Now")
 
-
+dt = datetime.datetime.utcnow()
+cool_over = dt + datetime.timedelta(30)
 
 @bot.event
 async def on_message(message):
-    if bot.user.mentioned_in(message) and message.reference is None:
-        await message.reply("🎆 The Haj is here! 🦈")
+    await bot.process_application_commands(message)       
+    while cool_over > dt:
+        global dt += datetime.timedelta(1)
+        asyncio.sleep(1)
     else:
-        con = normalize_string(message.content)
-        if len(con) >= 1 and len(con):
-            k = find_matching_key(con, REPLIES)
-            if k and message.author.id != bot.user.id:
-                # print(k)
-                await message.reply(REPLIES[k])
-
-    await bot.process_application_commands(message)            
+        global cool_over += datetime.timedelta(30)
+        if bot.user.mentioned_in(message) and message.reference is None:
+            await message.reply("🎆 The Haj is here! 🦈")
+        else:
+            con = normalize_string(message.content)
+            if len(con) >= 1 and len(con):
+                k = find_matching_key(con, REPLIES)
+                if k and message.author.id != bot.user.id:
+                    # print(k)
+                    await message.reply(REPLIES[k])
+                    global cool_over += datetime.timedelta(30)     
 
     # elif "haj" in message.content.lower() and message.author.id != bot.user.id:
     #     await message.reply("https://tenor.com/view/blahaj-go-spinny-blahaj-blahaj-spin-spin-shark-spin-gif-25670993")
