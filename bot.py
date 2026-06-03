@@ -4,6 +4,7 @@ from discord import default_permissions
 import random
 import json
 import datetime
+from time import sleep
 
 with open("config.json", "r") as f:
     config = json.load(f)
@@ -45,10 +46,10 @@ def normalize_string(input_string):
 
 
 def random_blahaj():
-    with open("blahaj.json") as dt:
-        data = json.load(dt)
-        random_index = random.randint(0, len(data) - 1)
-        return data[random_index]["url"], data[random_index]["name"]
+        with open("blahaj.json") as dt:
+            data = json.load(dt)
+            random_index = random.randint(0, len(data) - 1)
+            return data[random_index]["url"], data[random_index]["name"]
 
 
 @bot.event
@@ -59,6 +60,7 @@ async def on_ready():
         )
     )
     print("We Are Ready Now")
+
 
 
 @bot.event
@@ -72,6 +74,7 @@ async def on_message(message):
             if k and message.author.id != bot.user.id:
                 # print(k)
                 await message.reply(REPLIES[k])
+                sleep(30)
 
     await bot.process_application_commands(message)            
 
