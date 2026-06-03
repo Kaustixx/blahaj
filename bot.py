@@ -61,7 +61,7 @@ async def on_ready():
     )
     print("We Are Ready Now")
 
-dt = datetime.datetime.utcnow()
+dt = datetime.datetime.now(datetime.UTC)
 cool_over = dt
 
 @bot.event
