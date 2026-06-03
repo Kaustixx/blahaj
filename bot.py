@@ -70,10 +70,10 @@ async def on_message(message):
 global dt = dt
 global cool_over = cool_over   
     while dt < cool_over:
-        global cool_over -= datetime.timedelta(1)
+        global cool_over -= datetime.timedelta(seconds: 1)
         asyncio.sleep(1)
     else:
-        global cool_over += datetime.timedelta(30)
+        global cool_over += datetime.timedelta(seconds: 30)
         if bot.user.mentioned_in(message) and message.reference is None:
             await message.reply("🎆 The Haj is here! 🦈")
         else:
