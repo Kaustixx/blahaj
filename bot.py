@@ -66,11 +66,14 @@ cool_over = dt
 
 @bot.event
 async def on_message(message):
+    global dt
+    global cool_over
     await bot.process_application_commands(message) 
     while dt < cool_over:
         cool_over -= datetime.timedelta(seconds=1)
         await asyncio.sleep(1)
     else:
+        print ("cooldown over")
         cool_over += datetime.timedelta(seconds=30)
         if bot.user.mentioned_in(message) and message.reference is None:
             await message.reply("🎆 The Haj is here! 🦈")
