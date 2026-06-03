@@ -4,7 +4,7 @@ from discord import default_permissions
 import random
 import json
 import datetime
-impoet asyncio
+import asyncio
 
 with open("config.json", "r") as f:
     config = json.load(f)
@@ -66,14 +66,12 @@ cool_over = dt
 
 @bot.event
 async def on_message(message):
-    await bot.process_application_commands(message)
-global dt = dt
-global cool_over = cool_over   
+    await bot.process_application_commands(message) 
     while dt < cool_over:
-        global cool_over -= datetime.timedelta(seconds: 1)
-        asyncio.sleep(1)
+        cool_over -= datetime.timedelta(seconds=1)
+        await asyncio.sleep(1)
     else:
-        global cool_over += datetime.timedelta(seconds: 30)
+        cool_over += datetime.timedelta(seconds=30)
         if bot.user.mentioned_in(message) and message.reference is None:
             await message.reply("🎆 The Haj is here! 🦈")
         else:
