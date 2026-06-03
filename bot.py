@@ -62,15 +62,15 @@ async def on_ready():
     print("We Are Ready Now")
 
 dt = datetime.datetime.utcnow()
-cool_over = dt + datetime.timedelta(30)
+cool_over = dt
 
 @bot.event
 async def on_message(message):
     await bot.process_application_commands(message)
 global dt = dt
 global cool_over = cool_over   
-    while cool_over > dt:
-        global dt += datetime.timedelta(1)
+    while dt < cool_over:
+        global cool_over -= datetime.timedelta(1)
         asyncio.sleep(1)
     else:
         global cool_over += datetime.timedelta(30)
@@ -82,8 +82,7 @@ global cool_over = cool_over
                 k = find_matching_key(con, REPLIES)
                 if k and message.author.id != bot.user.id:
                     # print(k)
-                    await message.reply(REPLIES[k])
-                    global cool_over += datetime.timedelta(30)     
+                    await message.reply(REPLIES[k])     
 
     # elif "haj" in message.content.lower() and message.author.id != bot.user.id:
     #     await message.reply("https://tenor.com/view/blahaj-go-spinny-blahaj-blahaj-spin-spin-shark-spin-gif-25670993")
