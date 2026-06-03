@@ -74,7 +74,6 @@ async def on_message(message):
             if k and message.author.id != bot.user.id:
                 # print(k)
                 await message.reply(REPLIES[k])
-                sleep(30)
 
     await bot.process_application_commands(message)            
 
