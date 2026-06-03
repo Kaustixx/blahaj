@@ -66,7 +66,9 @@ cool_over = dt + datetime.timedelta(30)
 
 @bot.event
 async def on_message(message):
-    await bot.process_application_commands(message)       
+    await bot.process_application_commands(message)
+global dt = dt
+global cool_over = cool_over   
     while cool_over > dt:
         global dt += datetime.timedelta(1)
         asyncio.sleep(1)
