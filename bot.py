@@ -61,20 +61,28 @@ async def on_ready():
     )
     print("We Are Ready Now")
 
-dt = datetime.datetime.now(datetime.UTC)
-cool_over = dt
+#dt = datetime.datetime.now(datetime.UTC)
+#cool_over = dt
 
 @bot.event
 async def on_message(message):
     global dt
     global cool_over
     await bot.process_application_commands(message) 
-    while dt < cool_over:
-        cool_over -= datetime.timedelta(seconds=1)
-        await asyncio.sleep(1)
-    else:
-        print ("cooldown over")
-        cool_over += datetime.timedelta(seconds=30)
+#    while dt < cool_over:
+#        cool_over -= datetime.timedelta(seconds=1)
+#        await asyncio.sleep(1)
+#    else:
+#        print ("cooldown over")
+#        cool_over += datetime.timedelta(seconds=30)
+#        if bot.user.mentioned_in(message) and message.reference is None:
+#            await message.reply("🎆 The Haj is here! 🦈")
+#        else:
+#            con = normalize_string(message.content)
+#            if len(con) >= 1 and len(con):
+#                k = find_matching_key(con, REPLIES)
+#                if k and message.author.id != bot.user.id:
+                    # print(k)
         if bot.user.mentioned_in(message) and message.reference is None:
             await message.reply("🎆 The Haj is here! 🦈")
         else:
@@ -82,7 +90,6 @@ async def on_message(message):
             if len(con) >= 1 and len(con):
                 k = find_matching_key(con, REPLIES)
                 if k and message.author.id != bot.user.id:
-                    # print(k)
                     await message.reply(REPLIES[k])     
 
     # elif "haj" in message.content.lower() and message.author.id != bot.user.id:
