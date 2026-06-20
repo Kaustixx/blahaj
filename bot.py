@@ -83,14 +83,14 @@ async def on_message(message):
 #                k = find_matching_key(con, REPLIES)
 #                if k and message.author.id != bot.user.id:
                     # print(k)
-        if bot.user.mentioned_in(message) and message.reference is None:
-            await message.reply("🎆 The Haj is here! 🦈")
-        else:
-            con = normalize_string(message.content)
-            if len(con) >= 1 and len(con):
-                k = find_matching_key(con, REPLIES)
-                if k and message.author.id != bot.user.id:
-                    await message.reply(REPLIES[k])     
+    if bot.user.mentioned_in(message) and message.reference is None:
+        await message.reply("🎆 The Haj is here! 🦈")
+    else:
+        con = normalize_string(message.content)
+        if len(con) >= 1 and len(con):
+            k = find_matching_key(con, REPLIES)
+            if k and message.author.id != bot.user.id:
+                await message.reply(REPLIES[k])     
 
     # elif "haj" in message.content.lower() and message.author.id != bot.user.id:
     #     await message.reply("https://tenor.com/view/blahaj-go-spinny-blahaj-blahaj-spin-spin-shark-spin-gif-25670993")
